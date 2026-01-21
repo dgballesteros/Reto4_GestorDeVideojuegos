@@ -1,8 +1,33 @@
 :root,
-[data-bs-theme="light"],
-[data-bs-theme="dark"] {
+[data-bs-theme="light"] {
   --bs-primary: rgb(255, 255, 229);
   --bs-primary-rgb: 255, 255, 229;
+
+  --bs-secondary: rgb(133, 133, 61);
+  --bs-secondary-rgb: 133, 133, 61;
+
+  --bs-success: #22c55e;
+  --bs-success-rgb: 34, 197, 94;
+
+  --bs-danger: #ef4444;
+  --bs-danger-rgb: 239, 68, 68;
+
+  --bs-warning: #f59e0b;
+  --bs-warning-rgb: 245, 158, 11;
+
+  --bs-info: #0ea5e9;
+  --bs-info-rgb: 14, 165, 233;
+
+  --bs-light: #f8fafc;
+  --bs-light-rgb: 248, 250, 252;
+
+  --bs-dark: rgb(0, 0, 0);
+  --bs-dark-rgb: 0, 0, 0;
+}
+
+[data-bs-theme="dark"] {
+  --bs-primary: rgb(75, 75, 20);
+  --bs-primary-rgb: 75, 75, 20;
 
   --bs-secondary: rgb(133, 133, 61);
   --bs-secondary-rgb: 133, 133, 61;
