@@ -17,10 +17,13 @@ class VideojuegoDAO {
 
     // Método para guardar una nueva tarea
     // Recibe como parámetros la info de la nueva tarea: id_usuario, titulo, descripcion, completada
-    saveVideojuego(id_usuario, titulo, descripcion, completado = 0, fecha_inicio) {
-        fecha_creacion = new Date()
+    saveVideojuego(id_usuario, titulo, descripcion, completado = 0) {
         const sql = `INSERT INTO videojuegos (id_usuario, titulo, descripcion, completado) VALUES (?, ?, ?, ?)`;
-        return this.#database.prepare(sql).run(id_usuario, titulo, descripcion, completada);
+        return this.#database.prepare(sql).run(id_usuario, titulo, descripcion, completado);
+    }
+
+    showGames() {
+        return this.#database.prepare("select * from videojuegos").all();
     }
 
     // Método para eliminar una tarea por su id

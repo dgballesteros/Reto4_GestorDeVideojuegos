@@ -1,21 +1,22 @@
-<section class="mt-4">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1 class="fw-bold text-black">Log in</h1>
+<section class="mt-4 d-flex flex-column align-items-center">
+  <div class="w-100" style="max-width: 28rem;">
+    <h1 class="fw-bold font-display text-center mb-1" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">LOG IN</h1>
+    <p class="font-text text-center mb-4" style="color: var(--retro-text-muted); font-size: 0.95rem;">Sign in to your GameCenter account</p>
+  </div>
+  <hr class="border opacity-100 w-100" style="max-width: 28rem;">
+  <form method="post" action="/login" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100" style="max-width: 28rem;">
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control rounded-3" id="idName" placeholder="name@example.com" name="name" autocomplete="username">
+      <label for="idName">Email</label>
     </div>
-    <hr class="border border-dark opacity-100">
-    <form method="post" style="max-width:25rem;"
-        class="mx-auto mt-5 pt-3 d-flex flex-column align-items-center gap-3 border rounded-3 shadow">
-        <h3 class="mb-3 fw-normal">Login</h3>
-        <div class="form-floating">
-            <input type="text" class="form-control" id="idName" placeholder="name@example.com" name="name">
-            <label for="idName">Email address</label>
-        </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" id="idPassword" placeholder="Password" name="password">
-            <label for="idPassword">Password</label>
-        </div>
-
-        <button class="btn btn-primary py-2" type="submit">Sign in</button>
-        <p class="mt-5 mb-3 text-body-secondary">© 2017–2025</p>
-    </form>
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control rounded-3" id="idPassword" placeholder="Password" name="password" autocomplete="current-password">
+      <label for="idPassword">Password</label>
+    </div>
+    <button class="btn btn-primary rounded-3 w-100 py-2 fw-semibold mt-2" type="submit">Sign in</button>
+    <hr class="my-4 opacity-25">
+    <p class="text-center mb-0" style="color: var(--retro-text-muted); font-size: 0.9rem;">
+      Don't have an account? <a href="/register" class="fw-semibold text-decoration-none">Register</a>
+    </p>
+  </form>
 </section>

@@ -1,3 +1,9 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<section class="mt-4 retro-card rounded-0 p-4" style="max-width: 36rem;">
+  <h1 class="font-display fs-6 mb-3" style="color: var(--bs-danger);">ERROR</h1>
+  <h2 class="font-text fs-5 fw-semibold mb-3" style="color: var(--retro-text);"><%= message %></h2>
+  <p class="font-text mb-2" style="color: var(--retro-text-muted);">Status: <%= error.status %></p>
+  <% if (typeof error.stack !== 'undefined' && error.stack) { %>
+    <pre class="font-text small mt-3 p-3 retro-box-dashed rounded-0 overflow-auto" style="max-height: 12rem; color: var(--retro-text-muted);"><%= error.stack %></pre>
+  <% } %>
+  <a href="/" class="btn btn-primary rounded-0 mt-3">Back to home</a>
+</section>

@@ -14,6 +14,13 @@ class UsuarioDAO {
         return this.#database.prepare("select * from usuarios where email = ?").get(email);
     }
 
+    saveUsuario(email, password){
+        return this.#database.prepare("insert into usuarios (email, password) values (?, ?)").run(email, password);
+    }
+
+    showUsers() {
+        return this.#database.prepare("select * from usuarios").all();
+    }
 }
 
 // Exporta la clase UsuarioDAO para que pueda ser utilizada en otros módulos

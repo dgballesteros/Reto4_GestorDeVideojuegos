@@ -1,0 +1,32 @@
+<section class="mt-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="fw-bold font-display" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">USER LIST</h1>
+  </div>
+  <hr class="border opacity-100">
+  <div class="mt-4 p-4 retro-card rounded-0">
+    <% if (!users || users.length === 0) { %>
+      <div class="text-center py-5">
+        <p class="fs-5 mb-0 font-text" style="color: var(--retro-text-muted);">No registered users.</p>
+      </div>
+    <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle font-text mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col" class="text-nowrap">ID</th>
+              <th scope="col">Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach((user) => { %>
+              <tr>
+                <td><%= user.id %></td>
+                <td class="fw-semibold"><%= user.email %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</section>

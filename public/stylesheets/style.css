@@ -1,8 +1,16 @@
+/* ========== RETRO GLOBAL ========== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
   padding: 0;
   margin: 0;
-  box-sizing: border-box;
+  background-color: var(--retro-bg) !important;
+  color: var(--retro-text);
 }
 
 #header {
@@ -11,9 +19,188 @@ body {
 }
 
 .font-display {
-  font-family: "Press Start 2P", system-ui;
+  font-family: "Press Start 2P", cursive;
 }
 
 .font-text {
   font-family: "DM Sans", sans-serif;
+}
+
+/* Bordes tipo pixel / retro */
+.retro-box {
+  border: 3px solid var(--retro-border);
+  box-shadow: 0 0 12px var(--retro-glow);
+}
+
+.retro-box-dashed {
+  border: 2px dashed var(--retro-border-dim);
+}
+
+/* Formularios retro */
+.form-control,
+.form-select {
+  background-color: var(--retro-panel) !important;
+  border: 2px solid var(--retro-border-dim) !important;
+  color: var(--retro-text) !important;
+}
+
+/* Placeholders visibles (search, add-game, etc.) */
+.form-control::placeholder,
+.form-control::-webkit-input-placeholder,
+.form-control::-moz-placeholder {
+  color: rgba(230, 237, 243, 0.85) !important;
+  opacity: 1;
+}
+
+.form-control:focus {
+  border-color: var(--retro-border) !important;
+  box-shadow: 0 0 0 0.2rem var(--retro-glow) !important;
+}
+
+/* Labels form-floating = "placeholder" en login/register (han de verse bien) */
+.form-floating > label {
+  color: rgba(230, 237, 243, 0.85) !important;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  color: var(--retro-border) !important;
+}
+
+.form-label {
+  color: var(--retro-text);
+}
+
+/* Botones retro */
+.btn-primary {
+  background-color: var(--bs-primary) !important;
+  border: 2px solid var(--retro-border) !important;
+  color: var(--retro-bg) !important;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: var(--retro-border) !important;
+  color: var(--retro-bg) !important;
+  box-shadow: 0 0 16px var(--retro-glow);
+}
+
+.btn-outline-dark,
+.retro-btn-outline {
+  border: 2px dashed var(--retro-border);
+  color: var(--retro-border);
+  background: transparent;
+}
+
+.btn-outline-dark:hover,
+.retro-btn-outline:hover {
+  background-color: var(--retro-border);
+  color: var(--retro-bg);
+  box-shadow: 0 0 12px var(--retro-glow);
+}
+
+/* Enlaces */
+a {
+  color: var(--retro-border);
+}
+
+a:hover {
+  color: var(--retro-accent);
+  text-shadow: 0 0 8px var(--retro-glow-alt);
+}
+
+/* Tablas retro */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: rgba(0, 212, 255, 0.06);
+  --bs-table-hover-bg: rgba(0, 212, 255, 0.12);
+  --bs-table-border-color: var(--retro-border-dim);
+  color: var(--retro-text);
+}
+
+.table-dark {
+  --bs-table-bg: var(--retro-panel);
+  --bs-table-border-color: var(--retro-border);
+  --bs-table-color: var(--retro-text);
+}
+
+.table thead th {
+  border-bottom: 3px solid var(--retro-border);
+  color: var(--retro-border);
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.6rem;
+}
+
+.table td,
+.table th {
+  border-color: var(--retro-border-dim);
+}
+
+/* View Games */
+.games-table__thumb {
+  width: 80px;
+  min-width: 80px;
+}
+
+.games-table__img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  display: block;
+  border: 2px solid var(--retro-border-dim);
+}
+
+.games-table__placeholder {
+  width: 64px;
+  height: 64px;
+  background: var(--retro-panel);
+  font-size: 0.7rem;
+  border: 2px dashed var(--retro-border-dim);
+}
+
+.games-table__desc {
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badges retro */
+.badge.bg-secondary {
+  background-color: var(--retro-accent) !important;
+  color: var(--retro-bg);
+}
+
+/* Cards / Paneles */
+.retro-card {
+  background: var(--retro-panel);
+  border: 2px solid var(--retro-border-dim);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+/* HR */
+hr {
+  border-color: var(--retro-border) !important;
+  opacity: 0.6;
+}
+
+/* Text muted */
+.text-muted {
+  color: var(--retro-text-muted) !important;
+}
+
+.text-body-secondary {
+  color: var(--retro-text-muted) !important;
+}
+
+/* Input file */
+.input-group input[type="file"].form-control,
+input[type="file"].form-control {
+  color: var(--retro-text-muted);
+}
+
+input[type="file"].form-control::file-selector-button {
+  background: var(--retro-panel-hover);
+  border: 1px solid var(--retro-border-dim);
+  color: var(--retro-border);
 }

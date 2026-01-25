@@ -1,0 +1,30 @@
+<section class="mt-4 d-flex flex-column align-items-center">
+  <div class="w-100" style="max-width: 32rem;">
+    <h1 class="fw-bold font-display text-center mb-1" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">ADD GAME</h1>
+    <p class="font-text text-center mb-4" style="color: var(--retro-text-muted); font-size: 0.95rem;">Add a new game to your collection</p>
+  </div>
+  <hr class="border opacity-100 w-100" style="max-width: 32rem;">
+  <form method="post" action="/add-game" enctype="multipart/form-data" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100" style="max-width: 32rem;">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Game name</label>
+      <input type="text" class="form-control rounded-3" id="nombre" name="nombre" placeholder="e.g. The Legend of Zelda" required>
+    </div>
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Description</label>
+      <textarea class="form-control rounded-3" id="descripcion" name="descripcion" rows="3" placeholder="Brief description of the game..." required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="genero" class="form-label">Genre</label>
+      <input type="text" class="form-control rounded-3" id="genero" name="genero" placeholder="e.g. Adventure, RPG, Shooter...">
+    </div>
+    <div class="mb-3">
+      <label for="imagen" class="form-label">Image</label>
+      <input type="file" class="form-control rounded-3" id="imagen" name="imagen" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary rounded-3 w-100 py-2 fw-semibold mt-2">Add game</button>
+    <hr class="my-4 opacity-25">
+    <p class="text-center mb-0" style="color: var(--retro-text-muted); font-size: 0.9rem;">
+      View your collection? <a href="/view-games" class="fw-semibold text-decoration-none">View games</a>
+    </p>
+  </form>
+</section>

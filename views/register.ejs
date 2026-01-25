@@ -1,0 +1,26 @@
+<section class="mt-4 d-flex flex-column align-items-center">
+  <div class="w-100" style="max-width: 28rem;">
+    <h1 class="fw-bold font-display text-center mb-1" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">REGISTER</h1>
+    <p class="font-text text-center mb-4" style="color: var(--retro-text-muted); font-size: 0.95rem;">Create your GameCenter account</p>
+  </div>
+  <hr class="border opacity-100 w-100" style="max-width: 28rem;">
+  <form method="post" action="/register" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100" style="max-width: 28rem;">
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control rounded-3" id="idEmail" placeholder="name@example.com" name="email" required autocomplete="email">
+      <label for="idEmail">Email</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control rounded-3" id="idPassword" placeholder="Password" name="password" required autocomplete="new-password">
+      <label for="idPassword">Password</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="password" class="form-control rounded-3" id="idPasswordRepeat" placeholder="Repeat password" name="passwordRepeat" required autocomplete="new-password">
+      <label for="idPasswordRepeat">Repeat password</label>
+    </div>
+    <button class="btn btn-primary rounded-3 w-100 py-2 fw-semibold mt-2" type="submit">Sign up</button>
+    <hr class="my-4 opacity-25">
+    <p class="text-center mb-0" style="color: var(--retro-text-muted); font-size: 0.9rem;">
+      Already have an account? <a href="/login" class="fw-semibold text-decoration-none">Log in</a>
+    </p>
+  </form>
+</section>

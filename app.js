@@ -56,12 +56,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Sesiones
+// Sesiones: saveUninitialized false = no se crea sesión ni cookie hasta que se guarde algo (p. ej. en login).
+// Primera visita = sin sesión activa.
 app.use(expressSession({
   secret: 'mi-clave-secreta-supersegura',
   resave: false,
-  saveUninitialized: false, // correcto para login
-  cookie: { secure: false } // true solo con HTTPS
+  saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
 // Hacer la sesión accesible en EJS

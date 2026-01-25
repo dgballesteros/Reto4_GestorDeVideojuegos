@@ -11,7 +11,4 @@ module.exports = (db) => {
         )
     `;
     db.prepare(sql).run();
-
-    // Inserta una tarea de ejemplo si la tabla está vacía
-    // const count = db.prepare('SELECT count(*) as total FROM videojuegos').get();
 }

@@ -1,0 +1,51 @@
+<section class="mt-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="fw-bold font-display" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">GAME CATALOG</h1>
+  </div>
+  <hr class="border opacity-100">
+  <div class="mt-4 p-4 retro-card rounded-0">
+    <% if (!games || games.length === 0) { %>
+      <div class="text-center py-5">
+        <p class="fs-5 mb-0 font-text" style="color: var(--retro-text-muted);">No games in the catalog.</p>
+        <a href="/add-game" class="btn btn-primary rounded-0 mt-3">Add the first one</a>
+      </div>
+    <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle font-text mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col" class="text-nowrap">Image</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th scope="col" class="text-nowrap">Genre</th>
+              <th scope="col" class="text-center text-nowrap">User ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% games.forEach((game) => { %>
+              <tr>
+                <td class="games-table__thumb">
+                  <% if (game.imagen) { %>
+                    <img src="/images/<%= game.imagen %>" alt="<%= game.titulo || game.nombre %>" class="games-table__img rounded-0" />
+                  <% } else { %>
+                    <span class="games-table__placeholder rounded-0 d-inline-flex align-items-center justify-content-center small">No image</span>
+                  <% } %>
+                </td>
+                <td class="fw-semibold"><%= game.titulo || game.nombre %></td>
+                <td class="games-table__desc" style="color: var(--retro-text-muted);" title="<%= game.descripcion || '' %>"><%= game.descripcion || '—' %></td>
+                <td>
+                  <% if (game.genero) { %>
+                    <span class="badge bg-secondary rounded-0"><%= game.genero %></span>
+                  <% } else { %>
+                    <span class="small" style="color: var(--retro-text-muted);">—</span>
+                  <% } %>
+                </td>
+                <td class="text-center"><%= game.id_usuario %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</section>
