@@ -21,6 +21,10 @@ class UsuarioDAO {
     showUsers() {
         return this.#database.prepare("select * from usuarios").all();
     }
+
+    deleteUsuario(id) {
+        return this.#database.prepare("DELETE FROM usuarios WHERE id = ?").run(id);
+    }
 }
 
 // Exporta la clase UsuarioDAO para que pueda ser utilizada en otros módulos

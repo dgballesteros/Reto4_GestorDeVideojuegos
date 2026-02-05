@@ -1,21 +1,28 @@
 <section class="mt-4 d-flex flex-column align-items-center">
-  <div class="w-100" style="max-width: 28rem;">
-    <h1 class="fw-bold font-display text-center mb-1" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">LOG IN</h1>
-    <p class="font-text text-center mb-4" style="color: var(--retro-text-muted); font-size: 0.95rem;">Sign in to your GameCenter account</p>
+  <% if (typeof flash !== 'undefined' && flash) { %>
+    <div class="alert alert-danger alert-dismissible fade show rounded-0 font-text mb-4 w-100 mw-form-sm" role="alert">
+      <%= flash %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+  <div class="w-100 mw-form-sm">
+    <h1 class="fw-bold font-display text-center mb-1 retro-heading">LOG IN</h1>
+    <p class="font-text text-center mb-4 text-body-secondary small">Sign in to your GameCenter account</p>
   </div>
-  <hr class="border opacity-100 w-100" style="max-width: 28rem;">
-  <form method="post" action="/login" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100" style="max-width: 28rem;">
+  <hr class="border opacity-100 w-100 mw-form-sm">
+  <form id="login-form" method="post" action="/login" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100 mw-form-sm">
+    <% if (typeof redirect !== 'undefined' && redirect) { %><input type="hidden" name="redirect" value="<%= redirect %>"><% } %>
     <div class="form-floating mb-3">
-      <input type="text" class="form-control rounded-3" id="idName" placeholder="name@example.com" name="name" autocomplete="username">
+      <input type="text" class="form-control rounded-3" id="idName" placeholder="name@example.com" name="name" autocomplete="username" required>
       <label for="idName">Email</label>
     </div>
     <div class="form-floating mb-3">
-      <input type="password" class="form-control rounded-3" id="idPassword" placeholder="Password" name="password" autocomplete="current-password">
+      <input type="password" class="form-control rounded-3" id="idPassword" placeholder="Password" name="password" autocomplete="current-password" required>
       <label for="idPassword">Password</label>
     </div>
-    <button class="btn btn-primary rounded-3 w-100 py-2 fw-semibold mt-2" type="submit">Sign in</button>
+    <input type="submit" class="btn btn-primary rounded-3 w-100 py-2 fw-semibold mt-2" value="Sign in">
     <hr class="my-4 opacity-25">
-    <p class="text-center mb-0" style="color: var(--retro-text-muted); font-size: 0.9rem;">
+    <p class="text-center mb-0 text-body-secondary small">
       Don't have an account? <a href="/register" class="fw-semibold text-decoration-none">Register</a>
     </p>
   </form>

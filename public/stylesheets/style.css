@@ -1,22 +1,28 @@
 /* ========== RETRO GLOBAL ========== */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* Bootstrap ya incluye box-sizing y reset; solo overrides de tema */
 
 body {
-  padding: 0;
-  margin: 0;
   background-color: var(--retro-bg) !important;
   color: var(--retro-text);
 }
 
-#header {
-  padding-left: 18rem;
-  padding-right: 18rem;
-}
+/* Ancho máximo formularios (Bootstrap no tiene 32rem/28rem) */
+.mw-form { max-width: 32rem; }
+.mw-form-sm { max-width: 28rem; }
+.mw-form-lg { max-width: 36rem; }
+
+/* Ancho mínimo selects en filtros */
+.min-w-select { min-width: 10rem; }
+
+/* Miniatura imagen en formulario edición */
+.thumb-preview { width: 48px; height: 48px; }
+
+/* Altura máxima bloque pre (p. ej. error stack) */
+.max-h-pre { max-height: 12rem; }
+
+/* Padding horizontal layout (header/main) - equivalente a Bootstrap px-* */
+.layout-px { padding-left: 18rem; padding-right: 18rem; }
+@media (max-width: 1200px) { .layout-px { padding-left: 2rem; padding-right: 2rem; } }
 
 .font-display {
   font-family: "Press Start 2P", cursive;
@@ -27,11 +33,6 @@ body {
 }
 
 /* Bordes tipo pixel / retro */
-.retro-box {
-  border: 3px solid var(--retro-border);
-  box-shadow: 0 0 12px var(--retro-glow);
-}
-
 .retro-box-dashed {
   border: 2px dashed var(--retro-border-dim);
 }
@@ -85,17 +86,17 @@ body {
   box-shadow: 0 0 16px var(--retro-glow);
 }
 
-.btn-outline-dark,
-.retro-btn-outline {
+/* Outline buttons: estilo retro (dashed) usando Bootstrap .btn-outline-primary */
+.btn-outline-primary {
   border: 2px dashed var(--retro-border);
   color: var(--retro-border);
   background: transparent;
 }
 
-.btn-outline-dark:hover,
-.retro-btn-outline:hover {
+.btn-outline-primary:hover {
   background-color: var(--retro-border);
   color: var(--retro-bg);
+  border-color: var(--retro-border);
   box-shadow: 0 0 12px var(--retro-glow);
 }
 
@@ -165,6 +166,13 @@ a:hover {
   text-overflow: ellipsis;
 }
 
+/* Alert retro (panel + borde) - complementa Bootstrap .alert */
+.alert-retro {
+  background: var(--retro-panel);
+  border: 2px solid var(--bs-success);
+  color: var(--retro-text);
+}
+
 /* Badges retro */
 .badge.bg-secondary {
   background-color: var(--retro-accent) !important;
@@ -203,4 +211,67 @@ input[type="file"].form-control::file-selector-button {
   background: var(--retro-panel-hover);
   border: 1px solid var(--retro-border-dim);
   color: var(--retro-border);
+}
+
+/* ========== Toggle estado Completado / En progreso ========== */
+/* Sacado de internet y adaptado a mi tema*/
+.state-toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--retro-text);
+  font-family: inherit;
+}
+
+.state-toggle-switch:hover .state-toggle-switch__pill {
+  box-shadow: 0 0 10px var(--retro-glow);
+}
+
+.state-toggle-switch__pill {
+  position: relative;
+  width: 2.75rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  border: 2px solid var(--retro-border-dim);
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.state-toggle-switch__pill--off {
+  background: var(--retro-panel-hover);
+}
+
+.state-toggle-switch__pill--on {
+  background: var(--bs-success);
+  border-color: var(--bs-success);
+}
+
+.state-toggle-switch__knob {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-top: -0.4375rem; /* mitad del height para centrar */
+  border-radius: 50%;
+  background: var(--retro-text);
+  transition: transform 0.2s;
+}
+
+.state-toggle-switch__pill--on .state-toggle-switch__knob {
+  transform: translateX(calc(2.75rem - 0.875rem - 6px)); /* alineado a la derecha con margen */
+  background: #fff;
+}
+
+.state-toggle-switch__label {
+  color: var(--retro-text-muted);
+  font-weight: 500;
+}
+
+.state-toggle-switch__pill--on + .state-toggle-switch__label {
+  color: var(--bs-success);
 }

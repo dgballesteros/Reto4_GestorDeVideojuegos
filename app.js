@@ -23,14 +23,15 @@ var app = express();
 var dataDir = path.join(process.cwd(), 'data');
 fs.mkdirSync(dataDir, { recursive: true });
 
+// Asegurar que existe la carpeta de subidas (imágenes de juegos)
+var uploadsDir = path.join(process.cwd(), 'public', 'user-uploads');
+fs.mkdirSync(uploadsDir, { recursive: true });
+
 // Ruta al archivo SQLite
 var dbPath = path.join(dataDir, 'db.sqlite');
 
 // Abre / crea la base de datos y ejecuta initialize-usuarios y initialize-videojuegos
 var db = Database.getInstance(dbPath);
-
-// Hacer la DB accesible desde toda la app si hace falta
-app.locals.db = db;
 
 /* =====================================================
    VIEW ENGINE

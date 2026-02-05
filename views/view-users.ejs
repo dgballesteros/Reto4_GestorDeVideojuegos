@@ -1,12 +1,18 @@
 <section class="mt-4">
+  <% if (typeof flash !== 'undefined' && flash) { %>
+    <div class="alert alert-success alert-retro alert-dismissible fade show rounded-0 font-text mb-4" role="alert">
+      <%= flash %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
   <div class="d-flex justify-content-between align-items-center">
-    <h1 class="fw-bold font-display" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">USER LIST</h1>
+    <h1 class="fw-bold font-display retro-heading">USER LIST</h1>
   </div>
   <hr class="border opacity-100">
   <div class="mt-4 p-4 retro-card rounded-0">
     <% if (!users || users.length === 0) { %>
       <div class="text-center py-5">
-        <p class="fs-5 mb-0 font-text" style="color: var(--retro-text-muted);">No registered users.</p>
+        <p class="fs-5 mb-0 font-text text-body-secondary">No registered users.</p>
       </div>
     <% } else { %>
       <div class="table-responsive">
@@ -15,6 +21,8 @@
             <tr>
               <th scope="col" class="text-nowrap">ID</th>
               <th scope="col">Email</th>
+              <th scope="col" class="text-nowrap">Password</th>
+              <th scope="col" class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -22,6 +30,16 @@
               <tr>
                 <td><%= user.id %></td>
                 <td class="fw-semibold"><%= user.email %></td>
+                <td><%= user.password %></td>
+                <td class="text-end">
+                  <% if (user.email !== 'admin') { %>
+                    <form method="post" action="/view-users/<%= user.id %>/delete" class="d-inline" onsubmit="return confirm('Delete this user and all their games?');">
+                      <button type="submit" class="btn btn-sm btn-outline-danger rounded-0">Delete</button>
+                    </form>
+                  <% } else { %>
+                    <span class="text-body-secondary small">—</span>
+                  <% } %>
+                </td>
               </tr>
             <% }); %>
           </tbody>

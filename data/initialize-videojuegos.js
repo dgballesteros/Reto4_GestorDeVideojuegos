@@ -7,8 +7,13 @@ module.exports = (db) => {
             imagen VARCHAR(200),
             descripcion TEXT,
             genero VARCHAR(50),
+            plataforma VARCHAR(100),
             completado INTEGER DEFAULT 0
         )
     `;
     db.prepare(sql).run();
-}
+    try {
+        db.prepare('ALTER TABLE videojuegos ADD COLUMN plataforma VARCHAR(100)').run();
+    } catch (e) {
+    }
+};

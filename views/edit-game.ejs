@@ -1,0 +1,48 @@
+<section class="mt-4 d-flex flex-column align-items-center">
+  <div class="w-100 mw-form">
+    <h1 class="fw-bold font-display text-center mb-1 retro-heading">EDIT GAME</h1>
+    <p class="font-text text-center mb-4 text-body-secondary small">Update the game information</p>
+  </div>
+  <hr class="border opacity-100 w-100 mw-form">
+  <form method="post" action="/my-collection/<%= game.id %>/edit" enctype="multipart/form-data" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100 mw-form">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Game name</label>
+      <input type="text" class="form-control rounded-3" id="nombre" name="nombre" value="<%= game.titulo || '' %>" placeholder="e.g. The Legend of Zelda" required>
+    </div>
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Description</label>
+      <textarea class="form-control rounded-3" id="descripcion" name="descripcion" rows="3" placeholder="Brief description..."><%= game.descripcion || '' %></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="plataforma" class="form-label">Platform</label>
+      <input type="text" class="form-control rounded-3" id="plataforma" name="plataforma" value="<%= game.plataforma || '' %>" placeholder="e.g. PC, PlayStation, Xbox, Switch...">
+    </div>
+    <div class="mb-3">
+      <label for="genero" class="form-label">Genre</label>
+      <input type="text" class="form-control rounded-3" id="genero" name="genero" value="<%= game.genero || '' %>" placeholder="e.g. Adventure, RPG, Shooter...">
+    </div>
+    <div class="mb-3">
+      <label for="estado" class="form-label">Status</label>
+      <select class="form-select rounded-3" id="estado" name="estado">
+        <option value="0" <%= game.completado === 0 ? 'selected' : '' %>>In progress</option>
+        <option value="1" <%= game.completado === 1 ? 'selected' : '' %>>Completed</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="imagen" class="form-label">Image</label>
+      <% if (game.imagen) { %>
+        <p class="small mb-1 text-body-secondary">Current: <img src="<%= game.imagen.indexOf('user-uploads/') === 0 ? '/' + game.imagen : '/images/' + game.imagen %>" alt="" class="rounded-0 object-fit-cover thumb-preview"></p>
+      <% } %>
+      <input type="file" class="form-control rounded-3" id="imagen" name="imagen" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary rounded-3 w-100 py-2 fw-semibold mt-2">Save changes</button>
+    <hr class="my-4 opacity-25">
+    <p class="text-center mb-0 text-body-secondary small">
+      <% if (typeof isAdmin !== 'undefined' && isAdmin) { %>
+        <a href="/view-games" class="fw-semibold text-decoration-none">Back to Games catalog</a>
+        <span class="mx-2">|</span>
+      <% } %>
+      <a href="/my-collection" class="fw-semibold text-decoration-none">My collection</a>
+    </p>
+  </form>
+</section>

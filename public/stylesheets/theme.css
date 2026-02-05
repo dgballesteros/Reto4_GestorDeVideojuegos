@@ -113,3 +113,9 @@
 [data-bs-theme="light"] .form-floating > .form-control:not(:placeholder-shown) ~ label {
   color: var(--retro-border) !important;
 }
+
+/* Utilidades que usan variables del tema (Bootstrap no las tiene) */
+.retro-heading {
+  color: var(--retro-border);
+  text-shadow: 0 0 10px var(--retro-glow);
+}

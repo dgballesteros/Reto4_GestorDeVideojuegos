@@ -1,13 +1,56 @@
 <section class="mt-4">
-  <div class="d-flex justify-content-between align-items-center">
-    <h1 class="fw-bold font-display" style="color: var(--retro-border); text-shadow: 0 0 10px var(--retro-glow);">MY COLLECTION</h1>
+  <% if (typeof flash !== 'undefined' && flash) { %>
+    <div class="alert alert-success alert-retro alert-dismissible fade show rounded-0 font-text mb-4" role="alert">
+      <%= flash %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <h1 class="fw-bold font-display retro-heading">MY COLLECTION</h1>
   </div>
   <hr class="border opacity-100">
-  <div class="mt-4 p-4 retro-card rounded-0">
+
+  <!-- HU6: Filtrado por plataforma, género y estado -->
+  <div class="retro-card rounded-0 p-3 mb-4 font-text">
+    <p class="mb-2 fw-semibold small text-body-secondary">Filter by</p>
+    <form method="get" action="/my-collection" class="d-flex flex-wrap gap-3 align-items-end">
+      <div>
+        <label for="f-plataforma" class="form-label small mb-0">Platform</label>
+        <select name="plataforma" id="f-plataforma" class="form-select form-select-sm rounded-0 min-w-select">
+          <option value="">All</option>
+          <% if (plataformas) { plataformas.forEach(function(p) { %>
+            <option value="<%= p %>" <%= (filters && filters.plataforma === p) ? 'selected' : '' %>><%= p %></option>
+          <% }); } %>
+        </select>
+      </div>
+      <div>
+        <label for="f-genero" class="form-label small mb-0">Genre</label>
+        <select name="genero" id="f-genero" class="form-select form-select-sm rounded-0 min-w-select">
+          <option value="">All</option>
+          <% if (generos) { generos.forEach(function(g) { %>
+            <option value="<%= g %>" <%= (filters && filters.genero === g) ? 'selected' : '' %>><%= g %></option>
+          <% }); } %>
+        </select>
+      </div>
+      <div>
+        <label for="f-estado" class="form-label small mb-0">Status</label>
+        <select name="estado" id="f-estado" class="form-select form-select-sm rounded-0 min-w-select">
+          <option value="">All</option>
+          <option value="0" <%= (filters && filters.estado === '0') ? 'selected' : '' %>>In progress</option>
+          <option value="1" <%= (filters && filters.estado === '1') ? 'selected' : '' %>>Completed</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm rounded-0">Filter</button>
+      <a href="/my-collection" class="btn btn-outline-primary btn-sm rounded-0">Clear</a>
+    </form>
+  </div>
+
+  <div class="p-4 retro-card rounded-0">
     <% if (!games || games.length === 0) { %>
       <div class="text-center py-5">
-        <p class="fs-5 mb-0 font-text" style="color: var(--retro-text-muted);">No games in your collection.</p>
-        <a href="/add-game" class="btn btn-primary rounded-0 mt-3">Add the first one</a>
+        <p class="fs-5 mb-0 font-text text-body-secondary">No games in your collection.</p>
+        <p class="mt-3 mb-0 small text-body-secondary">Use <strong>Add Game</strong> in the menu to add your first game.</p>
       </div>
     <% } else { %>
       <div class="table-responsive">
@@ -16,8 +59,11 @@
             <tr>
               <th scope="col" class="text-nowrap">Image</th>
               <th scope="col">Title</th>
+              <th scope="col" class="text-nowrap">Platform</th>
               <th scope="col">Description</th>
               <th scope="col" class="text-nowrap">Genre</th>
+              <th scope="col" class="text-nowrap">Status</th>
+              <th scope="col" class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -25,27 +71,42 @@
               <tr>
                 <td class="games-table__thumb">
                   <% if (game.imagen) { %>
-                    <img src="/images/<%= game.imagen %>" alt="<%= game.titulo || game.nombre %>" class="games-table__img rounded-0" />
+                    <img src="<%= game.imagen.indexOf('user-uploads/') === 0 ? '/' + game.imagen : '/images/' + game.imagen %>" alt="<%= game.titulo %>" class="games-table__img rounded-0" />
                   <% } else { %>
                     <span class="games-table__placeholder rounded-0 d-inline-flex align-items-center justify-content-center small">No image</span>
                   <% } %>
                 </td>
-                <td class="fw-semibold"><%= game.titulo || game.nombre %></td>
-                <td class="games-table__desc" style="color: var(--retro-text-muted);" title="<%= game.descripcion || '' %>"><%= game.descripcion || '—' %></td>
+                <td class="fw-semibold"><%= game.titulo %></td>
+                <td><%= game.plataforma || '—' %></td>
+                <td class="games-table__desc text-body-secondary" title="<%= game.descripcion || '' %>"><%= game.descripcion || '—' %></td>
                 <td>
                   <% if (game.genero) { %>
                     <span class="badge bg-secondary rounded-0"><%= game.genero %></span>
                   <% } else { %>
-                    <span class="small" style="color: var(--retro-text-muted);">—</span>
+                    <span class="small text-body-secondary">—</span>
                   <% } %>
+                </td>
+                <td>
+                  <form method="post" action="/my-collection/<%= game.id %>/state" class="d-inline">
+                    <input type="hidden" name="completado" value="<%= game.completado === 1 ? '0' : '1' %>">
+                    <button type="submit" class="state-toggle-switch" title="<%= game.completado === 1 ? 'Click to mark as in progress' : 'Click to mark as completed' %>" aria-label="Toggle: <%= game.completado === 1 ? 'Completed' : 'In progress' %>">
+                      <span class="state-toggle-switch__pill state-toggle-switch__pill--<%= game.completado === 1 ? 'on' : 'off' %>">
+                        <span class="state-toggle-switch__knob"></span>
+                      </span>
+                      <span class="state-toggle-switch__label"><%= game.completado === 1 ? 'Completed' : 'In progress' %></span>
+                    </button>
+                  </form>
+                </td>
+                <td class="text-end">
+                  <a href="/my-collection/<%= game.id %>/edit" class="btn btn-sm btn-outline-primary rounded-0 me-1">Edit</a>
+                  <form method="post" action="/my-collection/<%= game.id %>/delete" class="d-inline" onsubmit="return confirm('Remove this game from your collection?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-0">Remove from collection</button>
+                  </form>
                 </td>
               </tr>
             <% }); %>
           </tbody>
         </table>
-      </div>
-      <div class="mt-4 text-center">
-        <a href="/add-game" class="btn btn-primary rounded-0 py-2 px-4">Add another game</a>
       </div>
     <% } %>
   </div>

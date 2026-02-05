@@ -36,7 +36,7 @@ class Database {
         const BetterSqlite3 = require("better-sqlite3");
         Database.#db = new BetterSqlite3(dbPath);
 
-        // Inicializo la tabla de tareas si no existe
+        // Inicializo la tabla de videojuegos si no existe
         require("./initialize-videojuegos")(Database.#db);
 
         //Inicializo la tabla de usuarios si no existe
