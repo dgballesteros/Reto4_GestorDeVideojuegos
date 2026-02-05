@@ -162,10 +162,9 @@ router.get('/my-collection/:id/edit', authMiddleware, function(req, res, next) {
   if (!game) return res.redirect('/my-collection');
   const isAdmin = req.session.user.email === 'admin';
   const isOwner = Number(game.id_usuario) === Number(req.session.user.id);
-  if (!isAdmin && !isOwner) {
-    return res.redirect('/my-collection');
-  }
-  res.render('edit-game', { game, isAdmin });
+  if (isAdmin) return res.redirect('/view-games'); // Admin solo puede ver, no editar
+  if (!isOwner) return res.redirect('/my-collection');
+  res.render('edit-game', { game, isAdmin: false });
 });
 
 router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen'), function(req, res, next) {
@@ -174,9 +173,8 @@ router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen')
   if (!game) return res.redirect('/my-collection');
   const isAdmin = req.session.user.email === 'admin';
   const isOwner = Number(game.id_usuario) === Number(req.session.user.id);
-  if (!isAdmin && !isOwner) {
-    return res.redirect('/my-collection');
-  }
+  if (isAdmin) return res.redirect('/view-games'); // Admin solo puede ver, no editar
+  if (!isOwner) return res.redirect('/my-collection');
   const titulo = (req.body.nombre || req.body.titulo || '').trim();
   if (!titulo) {
     return res.redirect('/my-collection/' + gameId + '/edit');
@@ -191,7 +189,7 @@ router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen')
       videojuegoDAO.updateVideojuegoImagen(gameId, 'user-uploads/' + req.file.filename);
     }
     req.session.flash = 'Game updated successfully.';
-    res.redirect(isAdmin ? '/view-games' : '/my-collection');
+    res.redirect('/my-collection');
   } catch (e) {
     res.redirect('/my-collection/' + gameId + '/edit');
   }
@@ -204,9 +202,8 @@ router.post('/my-collection/:id/delete', authMiddleware, function(req, res, next
   }
   const isAdmin = req.session.user.email === 'admin';
   const isOwner = Number(game.id_usuario) === Number(req.session.user.id);
-  if (!isAdmin && !isOwner) {
-    return res.redirect('/my-collection');
-  }
+  if (isAdmin) return res.redirect('/view-games'); // Admin solo puede ver, no eliminar
+  if (!isOwner) return res.redirect('/my-collection');
   videojuegoDAO.deleteVideojuego(req.params.id);
   res.redirect(req.get('Referer') || '/my-collection');
 });
