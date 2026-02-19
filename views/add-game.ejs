@@ -4,7 +4,8 @@
     <p class="font-text text-center mb-4 text-body-secondary small">Add a new game to your collection</p>
   </div>
   <hr class="border opacity-100 w-100 mw-form">
-  <form method="post" action="/add-game" enctype="multipart/form-data" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100 mw-form">
+  <form method="post" action="/add-game" enctype="multipart/form-data" class="retro-card rounded-3 p-4 p-md-5 mt-4 font-text w-100 mw-form" data-ajax="true">
+    <div id="ajax-message"></div>
     <div class="mb-3">
       <label for="nombre" class="form-label">Game name</label>
       <input type="text" class="form-control rounded-3" id="nombre" name="nombre" placeholder="e.g. The Legend of Zelda" required>

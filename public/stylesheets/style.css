@@ -275,3 +275,19 @@ input[type="file"].form-control::file-selector-button {
 .state-toggle-switch__pill--on + .state-toggle-switch__label {
   color: var(--bs-success);
 }
+/* ========== BOTÓN DE FAVORITO ========== */
+.favorite-btn {
+  text-decoration: none !important;
+  outline: none;
+  border: none;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.favorite-btn:hover,
+.favorite-btn:focus,
+.favorite-btn:active {
+  text-decoration: none !important;
+  outline: none;
+  box-shadow: none !important;
+}

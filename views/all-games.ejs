@@ -1,0 +1,81 @@
+<section class="mt-4">
+  <% if (typeof flash !== 'undefined' && flash) { %>
+    <div class="alert alert-success alert-retro alert-dismissible fade show rounded-0 font-text mb-4" role="alert">
+      <%= flash %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <h1 class="fw-bold font-display retro-heading">ALL GAMES</h1>
+  </div>
+  <hr class="border opacity-100">
+
+  <div class="p-4 retro-card rounded-0">
+    <% if (!games || games.length === 0) { %>
+      <div class="text-center py-5">
+        <p class="fs-5 mb-0 font-text text-body-secondary">No games available.</p>
+      </div>
+    <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle font-text mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col" class="text-nowrap">Image</th>
+              <th scope="col">Title</th>
+              <th scope="col" class="text-nowrap">Platform</th>
+              <th scope="col">Description</th>
+              <th scope="col" class="text-nowrap">Genre</th>
+              <th scope="col" class="text-nowrap">Favorite</th>
+              <th scope="col" class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% games.forEach((game) => { %>
+              <tr>
+                <td class="games-table__thumb">
+                  <% if (game.imagen) { %>
+                    <img src="<%= game.imagen.indexOf('user-uploads/') === 0 ? '/' + game.imagen : '/images/' + game.imagen %>" alt="<%= game.titulo %>" class="games-table__img rounded-0" />
+                  <% } else { %>
+                    <span class="games-table__placeholder rounded-0 d-inline-flex align-items-center justify-content-center small">No image</span>
+                  <% } %>
+                </td>
+                <td class="fw-semibold"><%= game.titulo %></td>
+                <td><%= game.plataforma || '—' %></td>
+                <td class="games-table__desc text-body-secondary" title="<%= game.descripcion || '' %>"><%= game.descripcion || '—' %></td>
+                <td>
+                  <% if (game.genero) { %>
+                    <span class="badge bg-secondary rounded-0"><%= game.genero %></span>
+                  <% } else { %>
+                    <span class="small text-body-secondary">—</span>
+                  <% } %>
+                </td>
+                <td class="text-center">
+                  <button class="favorite-btn btn btn-sm p-0" data-game-id="<%= game.id %>" type="button" title="Add to favorites">
+                    <span class="favorite-icon" style="font-size: 1.2rem; color: #ffc107;">☆</span>
+                  </button>
+                </td>
+                <td class="text-end">
+                  <% 
+                    const isInCollection = userGameIds && userGameIds.includes(String(game.id));
+                  %>
+                  <% if (isInCollection) { %>
+                    <form method="post" action="/remove-from-all-games" class="d-inline">
+                      <input type="hidden" name="gameId" value="<%= game.id %>">
+                      <button type="submit" class="btn btn-sm btn-outline-danger rounded-0">Remove from my collection</button>
+                    </form>
+                  <% } else { %>
+                    <form method="post" action="/add-to-collection" class="d-inline">
+                      <input type="hidden" name="gameId" value="<%= game.id %>">
+                      <button type="submit" class="btn btn-sm btn-outline-primary rounded-0">Add to my collection</button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</section>

@@ -14,7 +14,7 @@
   <!-- HU6: Filtrado por plataforma, género y estado -->
   <div class="retro-card rounded-0 p-3 mb-4 font-text">
     <p class="mb-2 fw-semibold small text-body-secondary">Filter by</p>
-    <form method="get" action="/my-collection" class="d-flex flex-wrap gap-3 align-items-end">
+    <form method="get" action="/my-collection" class="d-flex flex-wrap gap-3 align-items-end" id="filters-form">
       <div>
         <label for="f-plataforma" class="form-label small mb-0">Platform</label>
         <select name="plataforma" id="f-plataforma" class="form-select form-select-sm rounded-0 min-w-select">
@@ -41,6 +41,14 @@
           <option value="1" <%= (filters && filters.estado === '1') ? 'selected' : '' %>>Completed</option>
         </select>
       </div>
+      <div>
+        <label for="f-favoritos" class="form-label small mb-0">Favorites</label>
+        <select name="favoritos" id="f-favoritos" class="form-select form-select-sm rounded-0 min-w-select" data-filter="favorites">
+          <option value="">All</option>
+          <option value="1">Only Favorites</option>
+          <option value="0">Not Favorites</option>
+        </select>
+      </div>
       <button type="submit" class="btn btn-primary btn-sm rounded-0">Filter</button>
       <a href="/my-collection" class="btn btn-outline-primary btn-sm rounded-0">Clear</a>
     </form>
@@ -62,13 +70,14 @@
               <th scope="col" class="text-nowrap">Platform</th>
               <th scope="col">Description</th>
               <th scope="col" class="text-nowrap">Genre</th>
+              <th scope="col" class="text-nowrap">Favorite</th>
               <th scope="col" class="text-nowrap">Status</th>
               <th scope="col" class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
             <% games.forEach((game) => { %>
-              <tr>
+              <tr data-game-id="<%= game.id %>">
                 <td class="games-table__thumb">
                   <% if (game.imagen) { %>
                     <img src="<%= game.imagen.indexOf('user-uploads/') === 0 ? '/' + game.imagen : '/images/' + game.imagen %>" alt="<%= game.titulo %>" class="games-table__img rounded-0" />
@@ -85,6 +94,11 @@
                   <% } else { %>
                     <span class="small text-body-secondary">—</span>
                   <% } %>
+                </td>
+                <td class="text-center">
+                  <button class="favorite-btn btn btn-sm p-0" data-game-id="<%= game.id %>" type="button" title="Add to favorites">
+                    <span class="favorite-icon" style="font-size: 1.2rem; color: #ffc107;">☆</span>
+                  </button>
                 </td>
                 <td>
                   <form method="post" action="/my-collection/<%= game.id %>/state" class="d-inline">

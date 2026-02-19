@@ -75,6 +75,7 @@ router.get('/', function(req, res, next) {
   if (req.session.flash) {
     delete req.session.flash;
   }
+  // Si el usuario está logueado, mostrar favoritos, si no, mostrar index normal
   res.render('index', { flash });
 });
 
@@ -112,6 +113,31 @@ router.post('/add-to-collection', authMiddleware, function(req, res, next) {
   res.redirect(back);
 });
 
+// POST /remove-from-all-games - Eliminar juego de colección desde /all-games
+router.post('/remove-from-all-games', authMiddleware, function(req, res, next) {
+  const gameId = req.body.gameId;
+  if (!gameId) {
+    return res.redirect(req.get('Referer') || '/all-games');
+  }
+  
+  const game = videojuegoDAO.findVideojuegoById(gameId);
+  if (!game) {
+    return res.redirect(req.get('Referer') || '/all-games');
+  }
+  
+  const userId = req.session.user.id;
+  const isOwner = Number(game.id_usuario) === Number(userId);
+  
+  // Solo el propietario puede eliminar el juego
+  if (isOwner) {
+    videojuegoDAO.deleteVideojuego(gameId);
+    req.session.flash = 'Juego eliminado de tu colección';
+  }
+  
+  const back = req.get('Referer') || '/all-games';
+  res.redirect(back);
+});
+
 /* ========== PROTEGIDAS (login requerido) ========== */
 
 router.get('/add-game', authMiddleware, function(req, res, next) {
@@ -122,6 +148,9 @@ router.post('/add-game', authMiddleware, imagenes.single('imagen'), function(req
   const userID = req.session.user.id;
   const titulo = (req.body.nombre || req.body.titulo || '').trim();
   if (!titulo) {
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.status(400).json({ success: false, message: 'Game name is required' });
+    }
     return res.redirect('/add-game');
   }
   const descripcion = req.body.descripcion || '';
@@ -130,9 +159,15 @@ router.post('/add-game', authMiddleware, imagenes.single('imagen'), function(req
   const imagen = req.file ? 'user-uploads/' + req.file.filename : null;
   const completado = req.body.estado === '1' ? 1 : 0;
   try {
-    videojuegoDAO.saveVideojuego(userID, titulo, descripcion, genero, imagen, plataforma, completado);
+    const newGame = videojuegoDAO.saveVideojuego(userID, titulo, descripcion, genero, imagen, plataforma, completado);
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.json({ success: true, message: 'Game added successfully', redirect: '/my-collection' });
+    }
     res.redirect('/my-collection');
   } catch (e) {
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.status(500).json({ success: false, message: 'Error adding game' });
+    }
     res.redirect('/add-game');
   }
 });
@@ -170,13 +205,31 @@ router.get('/my-collection/:id/edit', authMiddleware, function(req, res, next) {
 router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen'), function(req, res, next) {
   const gameId = req.params.id;
   const game = videojuegoDAO.findVideojuegoById(gameId);
-  if (!game) return res.redirect('/my-collection');
+  if (!game) {
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.status(404).json({ success: false, message: 'Game not found' });
+    }
+    return res.redirect('/my-collection');
+  }
   const isAdmin = req.session.user.email === 'admin';
   const isOwner = Number(game.id_usuario) === Number(req.session.user.id);
-  if (isAdmin) return res.redirect('/view-games'); // Admin solo puede ver, no editar
-  if (!isOwner) return res.redirect('/my-collection');
+  if (isAdmin) {
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.status(403).json({ success: false, message: 'Forbidden' });
+    }
+    return res.redirect('/view-games');
+  }
+  if (!isOwner) {
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.status(403).json({ success: false, message: 'Forbidden' });
+    }
+    return res.redirect('/my-collection');
+  }
   const titulo = (req.body.nombre || req.body.titulo || '').trim();
   if (!titulo) {
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.status(400).json({ success: false, message: 'Game name is required' });
+    }
     return res.redirect('/my-collection/' + gameId + '/edit');
   }
   const descripcion = (req.body.descripcion || '').trim() || null;
@@ -188,9 +241,15 @@ router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen')
     if (req.file && req.file.filename) {
       videojuegoDAO.updateVideojuegoImagen(gameId, 'user-uploads/' + req.file.filename);
     }
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.json({ success: true, message: 'Game updated successfully', redirect: '/my-collection' });
+    }
     req.session.flash = 'Game updated successfully.';
     res.redirect('/my-collection');
   } catch (e) {
+    if (req.xhr || req.headers['content-type'] === 'application/json') {
+      return res.status(500).json({ success: false, message: 'Error updating game' });
+    }
     res.redirect('/my-collection/' + gameId + '/edit');
   }
 });
@@ -289,6 +348,50 @@ router.post('/register', function(req, res, next) {
   } catch (e) {
     return res.redirect('/register');
   }
+});
+
+/* ========== API ENDPOINTS ========== */
+
+// GET /all-games - Mostrar todos los videojuegos disponibles (requiere login)
+router.get('/all-games', authMiddleware, function(req, res, next) {
+  const games = videojuegoDAO.showGames();
+  const userId = req.session.user.id;
+  
+  // Obtener los IDs de juegos que el usuario ya tiene en su colección
+  const userGames = videojuegoDAO.findVideojuegoByUserId(userId);
+  const userGameIds = userGames.map(function(g) { return String(g.id); });
+  
+  const filteredGames = games.map(function(g) {
+    if (!g.imagen && g.titulo) {
+      const ref = videojuegoDAO.findOneWithImageByTitle(g.titulo);
+      if (ref && ref.imagen) {
+        return Object.assign({}, g, { imagen: ref.imagen });
+      }
+    }
+    return g;
+  });
+  const flash = req.session.flash || null;
+  if (req.session.flash) delete req.session.flash;
+  res.render('all-games', { games: filteredGames, flash, userGameIds });
+});
+
+// POST /api/toggle-favorite - Agregar/quitar favorito (AJAX)
+router.post('/api/toggle-favorite', authMiddleware, function(req, res, next) {
+  const gameId = req.body.gameId;
+  const userId = req.session.user.id;
+  
+  if (!gameId) {
+    return res.status(400).json({ success: false, message: 'Game ID is required' });
+  }
+  
+  const game = videojuegoDAO.findVideojuegoById(gameId);
+  if (!game) {
+    return res.status(404).json({ success: false, message: 'Game not found' });
+  }
+  
+  // Retornar un indicador de éxito sin guardar en BD
+  // Los favoritos se guardan en localStorage del cliente
+  res.json({ success: true, message: 'Favorite toggled' });
 });
 
 module.exports = router;

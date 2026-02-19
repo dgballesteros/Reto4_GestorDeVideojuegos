@@ -12,7 +12,14 @@
     </p>
     <hr class="my-4 opacity-25">
     <% if (typeof session !== 'undefined' && session && session.user) { %>
-      <a href="/my-collection" class="btn btn-primary rounded-0 py-3 px-5 fw-semibold">Go to My Collection</a>
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <a href="/my-collection" class="btn btn-primary rounded-0 py-3 px-5 fw-semibold">My Collection</a>
+        <a href="/all-games" class="btn btn-outline-primary rounded-0 py-3 px-5 fw-semibold">Browse All Games</a>
+      </div>
+      <hr class="my-4 opacity-25">
+      <p class="text-body-secondary small mb-0">
+        💡 Use the <strong>All Games</strong> section to browse and add games to your favorites using the star icon (★)
+      </p>
     <% } else { %>
       <a href="/login" class="btn btn-primary rounded-0 py-3 px-5 fw-semibold me-2">Log in</a>
       <a href="/register" class="btn btn-outline-primary rounded-0 py-3 px-5 fw-semibold">Register</a>
