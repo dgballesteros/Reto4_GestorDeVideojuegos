@@ -145,10 +145,11 @@ router.get('/add-game', authMiddleware, function(req, res, next) {
 });
 
 router.post('/add-game', authMiddleware, imagenes.single('imagen'), function(req, res, next) {
+  const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest';
   const userID = req.session.user.id;
   const titulo = (req.body.nombre || req.body.titulo || '').trim();
   if (!titulo) {
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.status(400).json({ success: false, message: 'Game name is required' });
     }
     return res.redirect('/add-game');
@@ -160,12 +161,12 @@ router.post('/add-game', authMiddleware, imagenes.single('imagen'), function(req
   const completado = req.body.estado === '1' ? 1 : 0;
   try {
     const newGame = videojuegoDAO.saveVideojuego(userID, titulo, descripcion, genero, imagen, plataforma, completado);
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.json({ success: true, message: 'Game added successfully', redirect: '/my-collection' });
     }
     res.redirect('/my-collection');
   } catch (e) {
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.status(500).json({ success: false, message: 'Error adding game' });
     }
     res.redirect('/add-game');
@@ -203,10 +204,11 @@ router.get('/my-collection/:id/edit', authMiddleware, function(req, res, next) {
 });
 
 router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen'), function(req, res, next) {
+  const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest';
   const gameId = req.params.id;
   const game = videojuegoDAO.findVideojuegoById(gameId);
   if (!game) {
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.status(404).json({ success: false, message: 'Game not found' });
     }
     return res.redirect('/my-collection');
@@ -214,20 +216,20 @@ router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen')
   const isAdmin = req.session.user.email === 'admin';
   const isOwner = Number(game.id_usuario) === Number(req.session.user.id);
   if (isAdmin) {
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.status(403).json({ success: false, message: 'Forbidden' });
     }
     return res.redirect('/view-games');
   }
   if (!isOwner) {
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.status(403).json({ success: false, message: 'Forbidden' });
     }
     return res.redirect('/my-collection');
   }
   const titulo = (req.body.nombre || req.body.titulo || '').trim();
   if (!titulo) {
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.status(400).json({ success: false, message: 'Game name is required' });
     }
     return res.redirect('/my-collection/' + gameId + '/edit');
@@ -241,13 +243,13 @@ router.post('/my-collection/:id/edit', authMiddleware, imagenes.single('imagen')
     if (req.file && req.file.filename) {
       videojuegoDAO.updateVideojuegoImagen(gameId, 'user-uploads/' + req.file.filename);
     }
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.json({ success: true, message: 'Game updated successfully', redirect: '/my-collection' });
     }
     req.session.flash = 'Game updated successfully.';
     res.redirect('/my-collection');
   } catch (e) {
-    if (req.xhr || req.headers['content-type'] === 'application/json') {
+    if (isAjax) {
       return res.status(500).json({ success: false, message: 'Error updating game' });
     }
     res.redirect('/my-collection/' + gameId + '/edit');

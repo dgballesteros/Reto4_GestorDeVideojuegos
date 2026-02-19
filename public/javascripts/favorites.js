@@ -138,7 +138,10 @@ function setupAjaxForm(form) {
     
     fetch(action, {
       method: method,
-      body: formData
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
     })
     .then(function(response) {
       if (!response.ok) {
